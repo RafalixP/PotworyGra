@@ -1,0 +1,30 @@
+import os  
+#importujemy bibliotekę aby móc pracować na plikach
+
+os.chdir('C:/Users/rafal.pieczka/OneDrive - Accenture/Python_kodo/20231018_corey/Pliki_fileRename') 
+#wskazujemy folder w którym znajdują się pliki do zmiany nazw
+
+print('Nazwy plików przed zmianą:')
+for files in os.listdir(): 
+    files = os.listdir()
+    print(files)
+print(' ')
+
+print('Nazwy plików po zmianie:')
+for f in os.listdir():  
+    # f to nasz pojedyńczy plik ze wskazanego folderu
+    #print(f)
+    f_name, f_ext = os.path.splitext(f) # dwie nowe zmienne, których wartości będziemy przypisywać dzieląc nazwy plików: na nazwę oraz rozszerzenie
+    f_title, f_course, f_num = f_name.split('-')
+    
+    f_title = f_title.strip()
+    f_course = f_course.strip()
+    f_num = f_num.strip()[1:].zfill(3)
+
+        #print(f_title)
+    print('{}-{}{}'.format(f_num, f_title, f_ext))
+
+    new_name = '{}-{}{}'.format(f_num, f_title, f_ext)
+
+    os.rename(f, new_name)
+
