@@ -1,7 +1,0 @@
-my_string = input("Podaj proszę jakiś ciąg znaków: ")
-print("Pierwszy znak to:", my_string[0])
-print("Ostatni znak to:", my_string[-1])
-print("Środkowy  znak to:", my_string[int(len(my_string)/2)])
-print("Znaki parzyste: ", my_string[0::2])
-print("Znaki nieparzyste: ", my_string[1::2])
-print("Wspak: ", my_string[::-1])
