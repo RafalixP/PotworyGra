@@ -87,7 +87,7 @@ class FastShootingBonus(Bonus):
         super().__init__(fast_shooting_img)
         self.bonus_type = "fast_shooting"
 
-class QuickMoveBonus(Bonus):
+class BoostBonus(Bonus):
     def __init__(self):
         super().__init__(quick_move_img)
         self.bonus_type = "quick_move"

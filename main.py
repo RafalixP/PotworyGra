@@ -2,7 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 from settings import WIDTH, HEIGHT, FPS, DELAY_RESPAWN
-from objects import Player, Bullet, Enemy, FastShootingBonus, QuickMoveBonus #Bonus deleted
+from objects import Player, Bullet, Enemy, FastShootingBonus, BoostBonus #Bonus deleted
 from ui import draw_text, show_menu, confirm_exit, game_over_screen
 import random
 
@@ -16,7 +16,7 @@ enemy_hit_sound = None
 player_hit_sound = None
 
 def spawn_bonus():
-    bonus_classes = [QuickMoveBonus] #[FastShootingBonus, QuickMoveBonus]
+    bonus_classes = [FastShootingBonus, BoostBonus]
     bonus_class = random.choice(bonus_classes)
     return bonus_class()
 
