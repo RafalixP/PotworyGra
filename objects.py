@@ -1,6 +1,6 @@
 import pygame
 import random
-from settings import WIDTH, HEIGHT
+from settings import WIDTH, HEIGHT, PLAYER_BASE_SPEED, PLAYER_MAX_SPEED, PLAYER_LIVES, PLAYER_SHOOT_DELAY, BULLET_SPEED, ENEMY_SPEED, BONUS_SPEED, SPEED_DECAY
 from assets import player_img, bullet_img, enemy_img, fast_shooting_img, quick_move_img, bonus_img
 
 class GameObject:
@@ -21,13 +21,13 @@ class GameObject:
 class Player(GameObject):
     def __init__(self):
         super().__init__(player_img, player_img.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10)))
-        self.base_speed = 6
+        self.base_speed = PLAYER_BASE_SPEED
         self.speed = self.base_speed
-        self.lives = 3
+        self.lives = PLAYER_LIVES
         self.score = 0
         self.respawning = False
         self.last_hit_time = 0
-        self.shoot_delay = 500
+        self.shoot_delay = PLAYER_SHOOT_DELAY
         self.last_shot_time = 0  # <-- Add this line
         self.boost_gauge = 0  # 0 to 100
 
@@ -56,7 +56,7 @@ class Player(GameObject):
 class Bullet(GameObject):
     def __init__(self, x, y):
         super().__init__(bullet_img, bullet_img.get_rect(center=(x, y)))
-        self.speed = -10
+        self.speed = BULLET_SPEED
 
     def update(self):
         """
@@ -67,7 +67,7 @@ class Bullet(GameObject):
 class Enemy(GameObject):
     def __init__(self):
         super().__init__(enemy_img, enemy_img.get_rect(midtop=(random.randint(20, WIDTH - 20), 0)))
-        self.speed = 2
+        self.speed = ENEMY_SPEED
 
     def update(self):
         self.rect.y += self.speed
@@ -75,7 +75,7 @@ class Enemy(GameObject):
 class Bonus(GameObject):
     def __init__(self, image):
         super().__init__(image, image.get_rect(midtop=(random.randint(20, WIDTH - 20), 0)))
-        self.speed = 4
+        self.speed = BONUS_SPEED
         print('Bonus')
 
     def update(self):
