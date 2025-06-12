@@ -2,8 +2,9 @@ import pygame
 import sys
 from pygame.locals import *
 from settings import WIDTH, HEIGHT, FPS, DELAY_RESPAWN
-from objects import Player, Bullet, Enemy, Bonus
+from objects import Player, Bullet, Enemy, FastShootingBonus, QuickMoveBonus #Bonus deleted
 from ui import draw_text, show_menu, confirm_exit, game_over_screen
+import random
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -13,6 +14,11 @@ clock = pygame.time.Clock()
 shoot_sound = None
 enemy_hit_sound = None
 player_hit_sound = None
+
+def spawn_bonus():
+    bonus_classes = [QuickMoveBonus] #[FastShootingBonus, QuickMoveBonus]
+    bonus_class = random.choice(bonus_classes)
+    return bonus_class()
 
 def main():
     while True:
@@ -52,6 +58,7 @@ def main():
 
             if not player.respawning:
                 player.move(keys)
+                player.update_boost()
 
             for bullet in bullets[:]:
                 bullet.update()
@@ -64,7 +71,7 @@ def main():
                     enemy_timer = pygame.time.get_ticks()
 
             if pygame.time.get_ticks() - bonus_timer > 10000 and bonus is None:
-                bonus = Bonus()
+                bonus = spawn_bonus()
                 bonus_timer = pygame.time.get_ticks()
 
             for enemy in enemies[:]:
@@ -87,7 +94,13 @@ def main():
                 if bonus.rect.top > HEIGHT:
                     bonus = None
                 elif bonus.rect.colliderect(player.rect):
-                    player.shoot_delay = 250
+                    if getattr(bonus, "bonus_type", None) == "fast_shooting":
+                        player.shoot_delay = 250  # Faster shooting
+                    elif getattr(bonus, "bonus_type", None) == "quick_move":
+                        if player.speed >= 0.9 * 12:
+                            player.speed = 12
+                        else:
+                            player.speed = min(12, 1.4 * player.speed)         # Faster movement (default is 6)
                     player.bonus_active = True
                     bonus = None
 
@@ -117,6 +130,7 @@ def main():
 
             draw_text(screen, f"Życia: {player.lives}", 10, 10)
             draw_text(screen, f"Wynik: {player.score}", 10, 40)
+            draw_text(screen, f"Boost: {player.boost_gauge}%", 10, 70)
 
             pygame.display.flip()
 
