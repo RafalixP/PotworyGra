@@ -1,6 +1,11 @@
 import pygame
 from settings import GREEN, WHITE, RED, BLUE, ORANGE
 
+# Additional colors for different boost types
+LIGHT_BLUE = (173, 216, 230)
+DARK_BLUE = (0, 0, 139)
+PURPLE = (128, 0, 128)
+
 player_img = pygame.Surface((50, 30), pygame.SRCALPHA)
 pygame.draw.polygon(player_img, GREEN, [(0, 30), (25, 0), (50, 30)])
 
@@ -17,5 +22,15 @@ pygame.draw.circle(bonus_img, BLUE, (10, 10), 10)
 fast_shooting_img = pygame.Surface((20, 20), pygame.SRCALPHA)
 pygame.draw.circle(fast_shooting_img, ORANGE, (10, 10), 10)  # <-- draw on fast_shooting_img
 
-quick_move_img = pygame.Surface((20, 20), pygame.SRCALPHA)
-pygame.draw.circle(quick_move_img, BLUE, (10, 10), 10)      # <-- draw on quick_move_img
+# Different boost bonus images
+small_boost_img = pygame.Surface((20, 20), pygame.SRCALPHA)
+pygame.draw.circle(small_boost_img, LIGHT_BLUE, (10, 10), 10)  # Light blue for small boost
+
+medium_boost_img = pygame.Surface((20, 20), pygame.SRCALPHA)
+pygame.draw.circle(medium_boost_img, BLUE, (10, 10), 10)       # Blue for medium boost
+
+large_boost_img = pygame.Surface((20, 20), pygame.SRCALPHA)
+pygame.draw.circle(large_boost_img, DARK_BLUE, (10, 10), 10)   # Dark blue for large boost
+
+# Keep the old quick_move_img for backward compatibility
+quick_move_img = medium_boost_img

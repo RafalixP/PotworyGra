@@ -1,7 +1,7 @@
 import pygame
 import sys
 from pygame.locals import *
-from settings import WIDTH, HEIGHT, FPS, DELAY_RESPAWN
+from settings import WIDTH, HEIGHT, FPS, DELAY_RESPAWN, DIFFICULTY_SETTINGS
 from objects import Player, Bullet, Enemy, FastShootingBonus, BoostBonus #Bonus deleted
 from ui import draw_text, show_menu, confirm_exit, game_over_screen
 import random
@@ -22,9 +22,11 @@ def spawn_bonus():
 
 def main():
     while True:
-        difficulty = show_menu(screen)
+        difficulty_level = show_menu(screen)
+        diff_settings = DIFFICULTY_SETTINGS.get(difficulty_level, DIFFICULTY_SETTINGS[2])  # Default to medium
 
         player = Player()
+        player.lives = diff_settings['player_lives']  # Set lives based on difficulty
         bullets = []
         enemies = []
         bonus = None
@@ -65,12 +67,14 @@ def main():
                 if bullet.rect.bottom < 0:
                     bullets.remove(bullet)
 
-            if pygame.time.get_ticks() - enemy_timer > 1500:
-                if len(enemies) < difficulty:
-                    enemies.append(Enemy())
+            if pygame.time.get_ticks() - enemy_timer > diff_settings['enemy_spawn_delay']:
+                if len(enemies) < diff_settings['max_enemies']:
+                    enemy = Enemy()
+                    enemy.speed *= diff_settings['enemy_speed_multiplier']  # Apply speed multiplier
+                    enemies.append(enemy)
                     enemy_timer = pygame.time.get_ticks()
 
-            if pygame.time.get_ticks() - bonus_timer > 10000 and bonus is None:
+            if pygame.time.get_ticks() - bonus_timer > diff_settings['bonus_spawn_delay'] and bonus is None:
                 bonus = spawn_bonus()
                 bonus_timer = pygame.time.get_ticks()
 
@@ -100,7 +104,7 @@ def main():
                         if player.speed >= 0.9 * 12:
                             player.speed = 12
                         else:
-                            player.speed = min(12, 1.4 * player.speed)         # Faster movement (default is 6)
+                            player.speed = min(12, 1.15 * player.speed)         # Faster movement (default is 6)
                     player.bonus_active = True
                     bonus = None
 
@@ -111,7 +115,7 @@ def main():
                         enemies.remove(enemy)
                         if enemy_hit_sound:
                             enemy_hit_sound.play()
-                        player.score += 1
+                        player.score += diff_settings['score_multiplier']
                         if player.score % 10 == 0:
                             player.lives += 1
                         break
