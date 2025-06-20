@@ -115,6 +115,10 @@ def main():
                         if player.score % 10 == 0:
                             player.lives += 1
                         break
+                
+                if bonus and bullet.rect.colliderect(bonus.rect):
+                    bullets.remove(bullet)
+                    bonus = None
 
             if player.respawning and pygame.time.get_ticks() - player.last_hit_time > DELAY_RESPAWN:
                 player.respawning = False
