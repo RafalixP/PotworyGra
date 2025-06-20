@@ -47,6 +47,9 @@ def main():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         if confirm_exit(screen):
+                            # Save score when player exits
+                            if player.score > 0:
+                                game_over_screen(screen, player.score)
                             running = False
 
             # Strzał
@@ -165,7 +168,7 @@ def main():
             pygame.display.flip()
 
             if player.lives <= 0:
-                game_over_screen(screen)
+                game_over_screen(screen, player.score)
                 break
 
 if __name__ == "__main__":
