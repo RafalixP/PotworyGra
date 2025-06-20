@@ -32,6 +32,7 @@ def main():
         bonus = None
         enemy_timer = 0
         bonus_timer = 0
+        game_start_time = pygame.time.get_ticks()  # Track game start time
 
         running = True
         while running:
@@ -159,6 +160,14 @@ def main():
             if bonus:
                 bonus.draw(screen)
 
+            # Game timer at top center
+            elapsed_time = (pygame.time.get_ticks() - game_start_time) // 1000
+            hours = elapsed_time // 3600
+            minutes = (elapsed_time % 3600) // 60
+            seconds = elapsed_time % 60
+            timer_text = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+            draw_text(screen, timer_text, WIDTH // 2 - 50, 10)
+            
             draw_text(screen, f"Życia: {player.lives}", 10, 10)
             draw_text(screen, f"Wynik: {player.score}", 10, 40)
             draw_text(screen, f"Boost: {player.boost_gauge}%", WIDTH - 150, 10)
