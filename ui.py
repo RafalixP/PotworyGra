@@ -14,11 +14,11 @@ def draw_text(screen, text, x, y):
 def show_menu(screen):
     while True:
         screen.fill((0, 0, 0))
-        draw_text(screen, "Kosmiczny Atak Potworów", 120, 200)
-        draw_text(screen, "1 - Łatwy (1 potwór)", 180, 300)
-        draw_text(screen, "2 - Średni (2 potwory)", 180, 350)
-        draw_text(screen, "3 - Trudny (3 potwory)", 180, 400)
-        draw_text(screen, "ESC - Wyjście", 180, 450)
+        draw_text(screen, "Kosmiczny Atak Potworów", 165, 200)
+        draw_text(screen, "1 - Łatwy (1 potwór)", 225, 300)
+        draw_text(screen, "2 - Średni (2 potwory)", 225, 350)
+        draw_text(screen, "3 - Trudny (3 potwory)", 225, 400)
+        draw_text(screen, "ESC - Wyjście", 225, 450)
         pygame.display.flip()
 
         for event in pygame.event.get():
@@ -54,7 +54,7 @@ def confirm_exit(screen):
 def game_over_screen(screen):
     screen.fill((0, 0, 0))
     draw_text(screen, "GAME OVER", WIDTH // 2 - 100, HEIGHT // 2 - 30)
-    draw_text(screen, "Naciśnij dowolny klawisz, aby powrócić do menu", WIDTH // 2 - 220, HEIGHT // 2 + 20)
+    draw_text(screen, "Naciśnij dowolny klawisz, aby powrócić do menu", WIDTH // 2 - 265, HEIGHT // 2 + 20)
     pygame.display.flip()
     waiting = True
     while waiting:

@@ -141,7 +141,11 @@ def main():
 
             draw_text(screen, f"Życia: {player.lives}", 10, 10)
             draw_text(screen, f"Wynik: {player.score}", 10, 40)
-            draw_text(screen, f"Boost: {player.boost_gauge}%", 10, 70)
+            draw_text(screen, f"Boost: {player.boost_gauge}%", WIDTH - 150, 10)
+            
+            # Fast shooting indicator
+            if player.shoot_delay < 500:  # Default is 500, so anything less means fast shooting is active
+                draw_text(screen, "Fast Shooting", WIDTH - 150, 40)
 
             pygame.display.flip()
 
