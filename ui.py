@@ -119,7 +119,7 @@ def show_scoreboard(screen, difficulty):
         else:
             y = 120
             for i, score in enumerate(scores[:20]):  # Show top 20
-                place_text = f"{i+1:2d}. {score['name'][:12]:<12} {score['score']:>6} {score['date']}"
+                place_text = f"{i+1:2d}. {score['name'][:12]:<12} {score['score']:>6}    {score['date']}"
                 draw_text(screen, place_text, 50, y)
                 y += 30
                 if y > HEIGHT - 100:
