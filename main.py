@@ -50,7 +50,7 @@ def main():
                         if confirm_exit(screen):
                             # Save score when player exits
                             if player.score > 0:
-                                game_over_screen(screen, player.score)
+                                game_over_screen(screen, player.score, difficulty_level)
                             running = False
 
             # Strzał
@@ -186,7 +186,7 @@ def main():
             pygame.display.flip()
 
             if player.lives <= 0:
-                game_over_screen(screen, player.score)
+                game_over_screen(screen, player.score, difficulty_level)
                 break
 
 if __name__ == "__main__":

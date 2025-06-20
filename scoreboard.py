@@ -2,26 +2,40 @@ import json
 import os
 from datetime import datetime
 
-SCOREBOARD_FILE = "scores.json"
+SCOREBOARD_FILES = {
+    1: "scores_easy.json",
+    2: "scores_medium.json", 
+    3: "scores_hard.json",
+    4: "scores_expert.json"
+}
 
-def load_scores():
-    """Load scores from file, return empty list if file doesn't exist"""
-    if os.path.exists(SCOREBOARD_FILE):
+DIFFICULTY_NAMES = {
+    1: "Łatwy",
+    2: "Średni",
+    3: "Trudny", 
+    4: "Expert"
+}
+
+def load_scores(difficulty):
+    """Load scores from file for specific difficulty"""
+    filename = SCOREBOARD_FILES.get(difficulty, SCOREBOARD_FILES[2])
+    if os.path.exists(filename):
         try:
-            with open(SCOREBOARD_FILE, 'r', encoding='utf-8') as f:
+            with open(filename, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except:
             return []
     return []
 
-def save_scores(scores):
-    """Save scores to file"""
-    with open(SCOREBOARD_FILE, 'w', encoding='utf-8') as f:
+def save_scores(scores, difficulty):
+    """Save scores to file for specific difficulty"""
+    filename = SCOREBOARD_FILES.get(difficulty, SCOREBOARD_FILES[2])
+    with open(filename, 'w', encoding='utf-8') as f:
         json.dump(scores, f, ensure_ascii=False, indent=2)
 
-def add_score(name, score):
-    """Add new score and keep only top 100"""
-    scores = load_scores()
+def add_score(name, score, difficulty):
+    """Add new score and keep only top 100 for specific difficulty"""
+    scores = load_scores(difficulty)
     new_entry = {
         'name': name,
         'score': score,
@@ -30,9 +44,9 @@ def add_score(name, score):
     scores.append(new_entry)
     scores.sort(key=lambda x: x['score'], reverse=True)
     scores = scores[:100]  # Keep only top 100
-    save_scores(scores)
+    save_scores(scores, difficulty)
     return scores
 
-def get_top_scores():
-    """Get top scores for display"""
-    return load_scores()
+def get_top_scores(difficulty):
+    """Get top scores for display for specific difficulty"""
+    return load_scores(difficulty)
