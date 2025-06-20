@@ -104,6 +104,13 @@ def main():
                 if bonus.rect.top > HEIGHT:
                     bonus = None
                 elif bonus.rect.colliderect(player.rect):
+                    # Award 1 point for collecting bonus
+                    player.score += 1
+                    # Check for life threshold after bonus collection
+                    if player.score >= player.next_life_threshold:
+                        player.lives += 1
+                        player.next_life_threshold *= 2
+                    
                     if getattr(bonus, "bonus_type", None) == "fast_shooting":
                         player.shoot_delay = max(150, 0.75 * player.shoot_delay)  # 150 ms minimum delay
                     elif getattr(bonus, "bonus_type", None) == "boost":
