@@ -129,6 +129,7 @@ def main():
             if player.respawning and pygame.time.get_ticks() - player.last_hit_time > DELAY_RESPAWN:
                 player.respawning = False
                 player.rect.midbottom = (WIDTH // 2, HEIGHT - 10)
+                player.velocity_x = 0  # Reset velocity to prevent drift
 
             player.draw(screen)
             for bullet in bullets:

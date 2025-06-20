@@ -96,7 +96,6 @@ class Bonus(GameObject):
     def __init__(self, image):
         super().__init__(image, image.get_rect(midtop=(random.randint(20, WIDTH - 20), 0)))
         self.speed = BONUS_SPEED
-        print('Bonus')
 
     def update(self):
         self.rect.y += self.speed
