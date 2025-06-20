@@ -92,6 +92,8 @@ def main():
                     if player_hit_sound:
                         player_hit_sound.play()
                     enemies.remove(enemy)
+                    # Usuń wrogów którzy są blisko dołu ekranu
+                    enemies[:] = [e for e in enemies if e.rect.bottom < HEIGHT - 100]
 
             if bonus:
                 bonus.update()
