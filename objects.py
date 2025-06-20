@@ -25,6 +25,7 @@ class Player(GameObject):
         self.speed = self.base_speed
         self.lives = 3  # Default lives, will be overridden by difficulty settings
         self.score = 0
+        self.next_life_threshold = 10  # Progressive life system: 10, 25, 50, 100, 200...
         self.respawning = False
         self.last_hit_time = 0
         self.shoot_delay = PLAYER_SHOOT_DELAY

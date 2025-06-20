@@ -128,8 +128,10 @@ def main():
                         if enemy_hit_sound:
                             enemy_hit_sound.play()
                         player.score += diff_settings['score_multiplier']
-                        if player.score % 10 == 0:
+                        # Progressive life system
+                        if player.score >= player.next_life_threshold:
                             player.lives += 1
+                            player.next_life_threshold *= 2  # Double the threshold: 10->20->40->80...
                         bullet_hit = True
                         break
                 
