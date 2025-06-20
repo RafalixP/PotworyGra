@@ -62,10 +62,10 @@ def main():
                 player.move(keys)
                 player.update_boost()
 
-            for bullet in bullets[:]:
+            # Update bullets and remove off-screen ones efficiently
+            for bullet in bullets:
                 bullet.update()
-                if bullet.rect.bottom < 0:
-                    bullets.remove(bullet)
+            bullets = [bullet for bullet in bullets if bullet.rect.bottom >= 0]
 
             if pygame.time.get_ticks() - enemy_timer > diff_settings['enemy_spawn_delay']:
                 if len(enemies) < diff_settings['max_enemies']:
@@ -110,23 +110,36 @@ def main():
                     player.bonus_active = True
                     bonus = None
 
-            for bullet in bullets[:]:
-                bullet_removed = False
-                for enemy in enemies[:]:
+            # More efficient collision detection using list comprehensions
+            bullets_to_remove = []
+            enemies_to_remove = []
+            
+            for i, bullet in enumerate(bullets):
+                bullet_hit = False
+                
+                # Check bullet-enemy collisions
+                for j, enemy in enumerate(enemies):
                     if bullet.rect.colliderect(enemy.rect):
-                        bullets.remove(bullet)
-                        enemies.remove(enemy)
+                        bullets_to_remove.append(i)
+                        enemies_to_remove.append(j)
                         if enemy_hit_sound:
                             enemy_hit_sound.play()
                         player.score += diff_settings['score_multiplier']
                         if player.score % 10 == 0:
                             player.lives += 1
-                        bullet_removed = True
+                        bullet_hit = True
                         break
                 
-                if not bullet_removed and bonus and bullet.rect.colliderect(bonus.rect):
-                    bullets.remove(bullet)
+                # Check bullet-bonus collision
+                if not bullet_hit and bonus and bullet.rect.colliderect(bonus.rect):
+                    bullets_to_remove.append(i)
                     bonus = None
+            
+            # Remove bullets and enemies in reverse order to maintain indices
+            for i in sorted(bullets_to_remove, reverse=True):
+                bullets.pop(i)
+            for i in sorted(enemies_to_remove, reverse=True):
+                enemies.pop(i)
 
             if player.respawning and pygame.time.get_ticks() - player.last_hit_time > DELAY_RESPAWN:
                 player.respawning = False
