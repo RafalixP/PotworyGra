@@ -111,6 +111,7 @@ def main():
                     bonus = None
 
             for bullet in bullets[:]:
+                bullet_removed = False
                 for enemy in enemies[:]:
                     if bullet.rect.colliderect(enemy.rect):
                         bullets.remove(bullet)
@@ -120,9 +121,10 @@ def main():
                         player.score += diff_settings['score_multiplier']
                         if player.score % 10 == 0:
                             player.lives += 1
+                        bullet_removed = True
                         break
                 
-                if bonus and bullet.rect.colliderect(bonus.rect):
+                if not bullet_removed and bonus and bullet.rect.colliderect(bonus.rect):
                     bullets.remove(bullet)
                     bonus = None
 
