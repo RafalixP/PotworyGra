@@ -11,6 +11,8 @@ ORANGE = (255, 165, 0)
 PLAYER_BASE_SPEED = 6
 PLAYER_MAX_SPEED = 12
 PLAYER_SHOOT_DELAY = 500
+PLAYER_ACCELERATION = 1.5  # Jak szybko przyspiesza (wyższe = mniej zauważalne)
+PLAYER_FRICTION = 0.7     # Jak szybko zwalnia (bliższe 1.0 = mniej zauważalne)
 
 BULLET_SPEED = -10
 ENEMY_SPEED = 2

@@ -1,6 +1,6 @@
 import pygame
 import random
-from settings import WIDTH, HEIGHT, PLAYER_BASE_SPEED, PLAYER_MAX_SPEED, PLAYER_SHOOT_DELAY, BULLET_SPEED, ENEMY_SPEED, BONUS_SPEED, SPEED_DECAY
+from settings import WIDTH, HEIGHT, PLAYER_BASE_SPEED, PLAYER_MAX_SPEED, PLAYER_SHOOT_DELAY, BULLET_SPEED, ENEMY_SPEED, BONUS_SPEED, SPEED_DECAY, PLAYER_ACCELERATION, PLAYER_FRICTION
 from assets import player_img, bullet_img, enemy_img, fast_shooting_img, boost_img, bonus_img, small_boost_img, medium_boost_img, large_boost_img
 
 class GameObject:
@@ -30,13 +30,33 @@ class Player(GameObject):
         self.shoot_delay = PLAYER_SHOOT_DELAY
         self.last_shot_time = 0  # <-- Add this line
         self.boost_gauge = 0  # 0 to 100
+        # Akceleracja
+        self.velocity_x = 0  # Aktualna prędkość pozioma
+        self.acceleration = PLAYER_ACCELERATION
+        self.friction = PLAYER_FRICTION
 
     def move(self, keys):
         from pygame.locals import K_LEFT, K_RIGHT
-        if keys[K_LEFT] and self.rect.left > 0:
-            self.rect.x -= self.speed
-        if keys[K_RIGHT] and self.rect.right < WIDTH:
-            self.rect.x += self.speed
+        
+        # Akceleracja w lewo/prawo
+        if keys[K_LEFT]:
+            self.velocity_x -= self.acceleration
+        elif keys[K_RIGHT]:
+            self.velocity_x += self.acceleration
+        else:
+            # Tarcie - stopniowe zwalnianie
+            self.velocity_x *= self.friction
+            if abs(self.velocity_x) < 0.1:  # Zatrzymaj przy bardzo małej prędkości
+                self.velocity_x = 0
+
+        # Ogranicz maksymalną prędkość
+        max_vel = self.speed
+        self.velocity_x = max(-max_vel, min(max_vel, self.velocity_x))
+        
+        # Zastosuj ruch z kontrolą granic
+        new_x = self.rect.x + self.velocity_x
+        if 0 <= new_x <= WIDTH - self.rect.width:
+            self.rect.x = new_x
 
     def draw(self, screen):
         if not self.respawning:
