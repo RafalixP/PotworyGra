@@ -100,7 +100,7 @@ def main():
                 elif bonus.rect.colliderect(player.rect):
                     if getattr(bonus, "bonus_type", None) == "fast_shooting":
                         player.shoot_delay = max(150, 0.75 * player.shoot_delay)  # 150 ms minimum delay
-                    elif getattr(bonus, "bonus_type", None) == "quick_move":
+                    elif getattr(bonus, "bonus_type", None) == "boost":
                         if player.speed >= 0.9 * 12:
                             player.speed = 12
                         else:

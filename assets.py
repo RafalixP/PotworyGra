@@ -32,5 +32,7 @@ pygame.draw.circle(medium_boost_img, BLUE, (10, 10), 10)       # Blue for medium
 large_boost_img = pygame.Surface((20, 20), pygame.SRCALPHA)
 pygame.draw.circle(large_boost_img, DARK_BLUE, (10, 10), 10)   # Dark blue for large boost
 
+# Boost image
+boost_img = medium_boost_img
 # Keep the old quick_move_img for backward compatibility
-quick_move_img = medium_boost_img
+quick_move_img = boost_img

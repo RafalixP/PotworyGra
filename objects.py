@@ -1,7 +1,7 @@
 import pygame
 import random
 from settings import WIDTH, HEIGHT, PLAYER_BASE_SPEED, PLAYER_MAX_SPEED, PLAYER_SHOOT_DELAY, BULLET_SPEED, ENEMY_SPEED, BONUS_SPEED, SPEED_DECAY
-from assets import player_img, bullet_img, enemy_img, fast_shooting_img, quick_move_img, bonus_img, small_boost_img, medium_boost_img, large_boost_img
+from assets import player_img, bullet_img, enemy_img, fast_shooting_img, boost_img, bonus_img, small_boost_img, medium_boost_img, large_boost_img
 
 class GameObject:
     def __init__(self, image, rect):
@@ -89,5 +89,5 @@ class FastShootingBonus(Bonus):
 
 class BoostBonus(Bonus):
     def __init__(self):
-        super().__init__(quick_move_img)
-        self.bonus_type = "quick_move"
+        super().__init__(boost_img)
+        self.bonus_type = "boost"
