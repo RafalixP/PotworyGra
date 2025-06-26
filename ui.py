@@ -81,6 +81,7 @@ def show_scoreboard_menu(screen):
     """Show difficulty selection for scoreboard"""
     while True:
         screen.fill((0, 0, 0))
+        draw_text(screen, "TABLICA WYNIKÓW", WIDTH // 2 - 180, 150)
         draw_text(screen, "WYBIERZ POZIOM TRUDNOŚCI", WIDTH // 2 - 180, 200)
         draw_text(screen, "1 - Łatwy", WIDTH // 2 - 50, 300)
         draw_text(screen, "2 - Średni", WIDTH // 2 - 50, 350)

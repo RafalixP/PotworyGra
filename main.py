@@ -25,7 +25,7 @@ def main():
         difficulty_level = show_menu(screen)
         diff_settings = DIFFICULTY_SETTINGS.get(difficulty_level, DIFFICULTY_SETTINGS[2])  # Default to medium
 
-        player = Player()
+        player = Player(diff_settings['life_threshold_multiplier'])
         player.lives = diff_settings['player_lives']  # Set lives based on difficulty
         bullets = []
         enemies = []
@@ -33,6 +33,11 @@ def main():
         enemy_timer = 0
         bonus_timer = 0
         game_start_time = pygame.time.get_ticks()  # Track game start time
+        
+        # Progressive difficulty variables
+        current_max_enemies = diff_settings['max_enemies']
+        current_spawn_delay = diff_settings['enemy_spawn_delay']
+        current_speed_multiplier = diff_settings['enemy_speed_multiplier']
 
         running = True
         while running:
@@ -71,10 +76,27 @@ def main():
                 bullet.update()
             bullets = [bullet for bullet in bullets if bullet.rect.bottom >= 0]
 
-            if pygame.time.get_ticks() - enemy_timer > diff_settings['enemy_spawn_delay']:
-                if len(enemies) < diff_settings['max_enemies']:
+            # Progressive difficulty increase (except for easy mode)
+            if difficulty_level > 1:
+                game_time = (pygame.time.get_ticks() - game_start_time) / 1000  # Time in seconds
+                progression = game_time * diff_settings['progression_rate']
+                
+                # Gradually increase max enemies (cap at +2 from base)
+                current_max_enemies = min(diff_settings['max_enemies'] + 2, 
+                                        diff_settings['max_enemies'] + int(progression * 2))
+                
+                # Gradually decrease spawn delay (minimum 300ms)
+                current_spawn_delay = max(300, 
+                                        diff_settings['enemy_spawn_delay'] - int(progression * 200))
+                
+                # Gradually increase speed (cap at 2x base speed)
+                current_speed_multiplier = min(diff_settings['enemy_speed_multiplier'] * 2,
+                                             diff_settings['enemy_speed_multiplier'] + progression)
+            
+            if pygame.time.get_ticks() - enemy_timer > current_spawn_delay:
+                if len(enemies) < current_max_enemies:
                     enemy = Enemy()
-                    enemy.speed *= diff_settings['enemy_speed_multiplier']  # Apply speed multiplier
+                    enemy.speed *= current_speed_multiplier  # Apply progressive speed multiplier
                     enemies.append(enemy)
                     enemy_timer = pygame.time.get_ticks()
 

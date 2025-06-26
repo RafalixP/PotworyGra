@@ -19,13 +19,13 @@ class GameObject:
         screen.blit(self.image, self.rect)
 
 class Player(GameObject):
-    def __init__(self):
+    def __init__(self, difficulty_multiplier=1.0):
         super().__init__(player_img, player_img.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10)))
         self.base_speed = PLAYER_BASE_SPEED
         self.speed = self.base_speed
         self.lives = 3  # Default lives, will be overridden by difficulty settings
         self.score = 0
-        self.next_life_threshold = 10  # Progressive life system: 10, 25, 50, 100, 200...
+        self.next_life_threshold = int(10 * difficulty_multiplier)  # Progressive life system adjusted by difficulty
         self.respawning = False
         self.last_hit_time = 0
         self.shoot_delay = PLAYER_SHOOT_DELAY
