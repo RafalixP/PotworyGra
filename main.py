@@ -1,5 +1,6 @@
 import pygame
 import sys
+import gc
 from pygame.locals import *
 from settings import WIDTH, HEIGHT, FPS, DELAY_RESPAWN, DIFFICULTY_SETTINGS
 from objects import Player, Bullet, Enemy, FastShootingBonus, BoostBonus #Bonus deleted
@@ -38,10 +39,45 @@ def main():
         current_max_enemies = diff_settings['max_enemies']
         current_spawn_delay = diff_settings['enemy_spawn_delay']
         current_speed_multiplier = diff_settings['enemy_speed_multiplier']
+        
+        # Text rendering cache
+        last_lives = -1
+        last_score = -1
+        last_boost = -1
+        last_timer = -1
+        cached_texts = {}
+        
+        # Performance monitoring
+        frame_count = 0
+        last_fps_check = pygame.time.get_ticks()
+        last_gc_time = pygame.time.get_ticks()
+        
+        # Disable automatic garbage collection
+        gc.disable()
 
         running = True
         while running:
-            clock.tick(FPS)
+            # Dynamic FPS adjustment
+            current_fps = FPS
+            if frame_count > 60:  # After 1 second
+                avg_frame_time = (pygame.time.get_ticks() - last_fps_check) / 60
+                if avg_frame_time > 20:  # If averaging >20ms per frame
+                    current_fps = 45  # Reduce to 45 FPS
+                if frame_count % 60 == 0:  # Reset every second
+                    last_fps_check = pygame.time.get_ticks()
+            
+            dt = clock.tick(current_fps)
+            frame_count += 1
+            
+            # Skip heavy processing every 4th frame if performance is poor
+            skip_heavy_processing = (frame_count % 4 == 0) and (dt > 20)  # 20ms = low performance
+            
+            # Manual garbage collection every 5 seconds during good performance
+            current_time = pygame.time.get_ticks()
+            if current_time - last_gc_time > 5000 and dt < 18:  # Only during good performance
+                gc.collect()
+                last_gc_time = current_time
+            
             screen.fill((0, 0, 0))
 
             keys = pygame.key.get_pressed()
@@ -80,8 +116,8 @@ def main():
             if len(bullets) > 50:
                 bullets = bullets[-50:]
 
-            # Progressive difficulty increase (except for easy mode)
-            if difficulty_level > 1:
+            # Progressive difficulty increase (except for easy mode) - skip during performance issues
+            if difficulty_level > 1 and not skip_heavy_processing:
                 game_time = (pygame.time.get_ticks() - game_start_time) / 1000  # Time in seconds
                 progression = game_time * diff_settings['progression_rate']
                 
@@ -196,20 +232,35 @@ def main():
             if bonus:
                 bonus.draw(screen)
 
-            # Game timer at top center
+            # Cached text rendering - only update when values change
             elapsed_time = (pygame.time.get_ticks() - game_start_time) // 1000
-            hours = elapsed_time // 3600
-            minutes = (elapsed_time % 3600) // 60
-            seconds = elapsed_time % 60
-            timer_text = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-            draw_text(screen, timer_text, WIDTH // 2 - 50, 10)
+            if elapsed_time != last_timer:
+                hours = elapsed_time // 3600
+                minutes = (elapsed_time % 3600) // 60
+                seconds = elapsed_time % 60
+                cached_texts['timer'] = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+                last_timer = elapsed_time
             
-            draw_text(screen, f"Życia: {player.lives}", 10, 10)
-            draw_text(screen, f"Wynik: {player.score}", 10, 40)
-            draw_text(screen, f"Boost: {player.boost_gauge}%", WIDTH - 150, 10)
+            if player.lives != last_lives:
+                cached_texts['lives'] = f"Życia: {player.lives}"
+                last_lives = player.lives
+                
+            if player.score != last_score:
+                cached_texts['score'] = f"Wynik: {player.score}"
+                last_score = player.score
+                
+            if player.boost_gauge != last_boost:
+                cached_texts['boost'] = f"Boost: {player.boost_gauge}%"
+                last_boost = player.boost_gauge
+            
+            # Draw cached texts
+            draw_text(screen, cached_texts.get('timer', '00:00:00'), WIDTH // 2 - 50, 10)
+            draw_text(screen, cached_texts.get('lives', 'Życia: 0'), 10, 10)
+            draw_text(screen, cached_texts.get('score', 'Wynik: 0'), 10, 40)
+            draw_text(screen, cached_texts.get('boost', 'Boost: 0%'), WIDTH - 150, 10)
             
             # Fast shooting indicator
-            if player.shoot_delay < 500:  # Default is 500, so anything less means fast shooting is active
+            if player.shoot_delay < 500:
                 draw_text(screen, "Fast Shooting", WIDTH - 150, 40)
 
             pygame.display.flip()
