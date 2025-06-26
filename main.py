@@ -75,6 +75,10 @@ def main():
             for bullet in bullets:
                 bullet.update()
             bullets = [bullet for bullet in bullets if bullet.rect.bottom >= 0]
+            
+            # Limit bullet count to prevent memory issues
+            if len(bullets) > 50:
+                bullets = bullets[-50:]
 
             # Progressive difficulty increase (except for easy mode)
             if difficulty_level > 1:
@@ -143,38 +147,41 @@ def main():
                     player.bonus_active = True
                     bonus = None
 
-            # More efficient collision detection using list comprehensions
-            bullets_to_remove = []
-            enemies_to_remove = []
+            # Optimized collision detection
+            bullets_to_remove = set()
+            enemies_to_remove = set()
             
             for i, bullet in enumerate(bullets):
+                if i in bullets_to_remove:
+                    continue
+                    
                 bullet_hit = False
                 
                 # Check bullet-enemy collisions
                 for j, enemy in enumerate(enemies):
+                    if j in enemies_to_remove:
+                        continue
                     if bullet.rect.colliderect(enemy.rect):
-                        bullets_to_remove.append(i)
-                        enemies_to_remove.append(j)
+                        bullets_to_remove.add(i)
+                        enemies_to_remove.add(j)
                         if enemy_hit_sound:
                             enemy_hit_sound.play()
                         player.score += diff_settings['score_multiplier']
                         # Progressive life system
                         if player.score >= player.next_life_threshold:
                             player.lives += 1
-                            player.next_life_threshold *= 2  # Double the threshold: 10->20->40->80...
+                            player.next_life_threshold *= 2
                         bullet_hit = True
                         break
                 
                 # Check bullet-bonus collision
                 if not bullet_hit and bonus and bullet.rect.colliderect(bonus.rect):
-                    bullets_to_remove.append(i)
+                    bullets_to_remove.add(i)
                     bonus = None
             
-            # Remove bullets and enemies in reverse order to maintain indices
-            for i in sorted(bullets_to_remove, reverse=True):
-                bullets.pop(i)
-            for i in sorted(enemies_to_remove, reverse=True):
-                enemies.pop(i)
+            # Remove bullets and enemies efficiently
+            bullets = [bullet for i, bullet in enumerate(bullets) if i not in bullets_to_remove]
+            enemies = [enemy for i, enemy in enumerate(enemies) if i not in enemies_to_remove]
 
             if player.respawning and pygame.time.get_ticks() - player.last_hit_time > DELAY_RESPAWN:
                 player.respawning = False
