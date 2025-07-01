@@ -16,10 +16,11 @@ def show_menu(screen):
     while True:
         screen.fill((0, 0, 0))
         draw_text(screen, "Kosmiczny Atak Potworów", 165, 200)
-        draw_text(screen, "1 - Łatwy (1 potwór)", 225, 300)
-        draw_text(screen, "2 - Średni (2 potwory)", 225, 350)
-        draw_text(screen, "3 - Trudny (3 potwory)", 225, 400)
-        draw_text(screen, "4 - Tablica wyników", 225, 450)
+        draw_text(screen, "1 - Łatwy (1 potwór)", 225, 280)
+        draw_text(screen, "2 - Średni (2 potwory)", 225, 320)
+        draw_text(screen, "3 - Trudny (3 potwory)", 225, 360)
+        draw_text(screen, "4 - Expert (4 potwory)", 225, 400)
+        draw_text(screen, "5 - Tablica wyników", 225, 450)
         draw_text(screen, "ESC - Wyjście", 225, 500)
         pygame.display.flip()
 
@@ -35,6 +36,8 @@ def show_menu(screen):
                 if event.key == K_3:
                     return 3
                 if event.key == K_4:
+                    return 4
+                if event.key == K_5:
                     show_scoreboard_menu(screen)
                 if event.key == K_ESCAPE:
                     pygame.quit()
