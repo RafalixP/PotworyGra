@@ -155,10 +155,10 @@ def game_over_screen(screen, player_score=0, difficulty=2, game_time=0):
     draw_text(screen, "GAME OVER", WIDTH // 2 - 100, HEIGHT // 2 - 100)
     draw_text(screen, f"Wynik: {player_score}", WIDTH // 2 - 80, HEIGHT // 2 - 50)
     draw_text(screen, f"Czas: {time_str}", WIDTH // 2 - 80, HEIGHT // 2 - 20)
-    draw_text(screen, "Naciśnij dowolny klawisz aby kontynuować", WIDTH // 2 - 200, HEIGHT // 2 + 20)
+    draw_text(screen, "Naciśnij ENTER aby kontynuować", WIDTH // 2 - 200, HEIGHT // 2 + 20)
     pygame.display.flip()
     
-    # Wait for key press
+    # Wait for ENTER key press
     waiting = True
     while waiting:
         for event in pygame.event.get():
@@ -166,7 +166,8 @@ def game_over_screen(screen, player_score=0, difficulty=2, game_time=0):
                 pygame.quit()
                 sys.exit()
             if event.type == KEYDOWN:
-                waiting = False
+                if event.key == K_RETURN:
+                    waiting = False
     
     # Save score if > 0
     if player_score > 0:
@@ -174,3 +175,4 @@ def game_over_screen(screen, player_score=0, difficulty=2, game_time=0):
         if name:  # Only save if name was entered (not ESC)
             from scoreboard import add_score
             add_score(name, player_score, difficulty)
+            show_scoreboard(screen, difficulty)
