@@ -140,16 +140,41 @@ def show_scoreboard(screen, difficulty):
                 if event.key == K_ESCAPE:
                     return
 
-def game_over_screen(screen, player_score=0, difficulty=2):
+def game_over_screen(screen, player_score=0, difficulty=2, game_time=0):
     """Game over screen with optional score saving"""
+    # Format time display
+    hours = game_time // 3600
+    minutes = (game_time % 3600) // 60
+    seconds = game_time % 60
+    time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+    
+    # Show final score and time
+    screen.fill((0, 0, 0))
+    draw_text(screen, "GAME OVER", WIDTH // 2 - 100, HEIGHT // 2 - 100)
+    draw_text(screen, f"Wynik: {player_score}", WIDTH // 2 - 80, HEIGHT // 2 - 50)
+    draw_text(screen, f"Czas: {time_str}", WIDTH // 2 - 80, HEIGHT // 2 - 20)
+    draw_text(screen, "Naciśnij dowolny klawisz aby kontynuować", WIDTH // 2 - 200, HEIGHT // 2 + 20)
+    pygame.display.flip()
+    
+    # Wait for key press
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                waiting = False
+    
+    # Save score if > 0
     if player_score > 0:
         name = get_player_name(screen)
         from scoreboard import add_score
         add_score(name, player_score, difficulty)
     
+    # Final screen
     screen.fill((0, 0, 0))
-    draw_text(screen, "GAME OVER", WIDTH // 2 - 100, HEIGHT // 2 - 30)
-    draw_text(screen, "Naciśnij dowolny klawisz, aby powrócić do menu", WIDTH // 2 - 265, HEIGHT // 2 + 20)
+    draw_text(screen, "Naciśnij dowolny klawisz, aby powrócić do menu", WIDTH // 2 - 265, HEIGHT // 2)
     pygame.display.flip()
     waiting = True
     while waiting:

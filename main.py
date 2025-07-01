@@ -91,7 +91,8 @@ def main():
                         if confirm_exit(screen):
                             # Save score when player exits
                             if player.score > 0:
-                                game_over_screen(screen, player.score, difficulty_level)
+                                elapsed_time = (pygame.time.get_ticks() - game_start_time) // 1000
+                                game_over_screen(screen, player.score, difficulty_level, elapsed_time)
                             running = False
 
             # Strzał
@@ -266,7 +267,8 @@ def main():
             pygame.display.flip()
 
             if player.lives <= 0:
-                game_over_screen(screen, player.score, difficulty_level)
+                elapsed_time = (pygame.time.get_ticks() - game_start_time) // 1000
+                game_over_screen(screen, player.score, difficulty_level, elapsed_time)
                 break
 
 if __name__ == "__main__":
