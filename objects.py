@@ -3,6 +3,8 @@ import random
 from settings import WIDTH, HEIGHT, PLAYER_BASE_SPEED, PLAYER_MAX_SPEED, PLAYER_SHOOT_DELAY, BULLET_SPEED, ENEMY_SPEED, BONUS_SPEED, SPEED_DECAY, PLAYER_ACCELERATION, PLAYER_FRICTION
 from assets import player_img, bullet_img, enemy_img, fast_shooting_img, boost_img, bonus_img, small_boost_img, medium_boost_img, large_boost_img
 
+#comment
+
 class GameObject:
     def __init__(self, image, rect):
         """
