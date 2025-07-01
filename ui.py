@@ -65,7 +65,7 @@ def get_player_name(screen):
         screen.fill((0, 0, 0))
         draw_text(screen, "Wprowadź swoje imię:", WIDTH // 2 - 150, HEIGHT // 2 - 50)
         draw_text(screen, name + "_", WIDTH // 2 - 100, HEIGHT // 2)
-        draw_text(screen, "Naciśnij ENTER aby zatwierdzić", WIDTH // 2 - 180, HEIGHT // 2 + 50)
+        draw_text(screen, "ENTER - zapisz, ESC - pomiń", WIDTH // 2 - 150, HEIGHT // 2 + 50)
         pygame.display.flip()
         
         for event in pygame.event.get():
@@ -75,6 +75,8 @@ def get_player_name(screen):
             if event.type == KEYDOWN:
                 if event.key == K_RETURN and name.strip():
                     return name.strip()
+                elif event.key == K_ESCAPE:
+                    return None
                 elif event.key == K_BACKSPACE:
                     name = name[:-1]
                 elif event.unicode.isprintable() and len(name) < 15:
@@ -169,18 +171,6 @@ def game_over_screen(screen, player_score=0, difficulty=2, game_time=0):
     # Save score if > 0
     if player_score > 0:
         name = get_player_name(screen)
-        from scoreboard import add_score
-        add_score(name, player_score, difficulty)
-    
-    # Final screen
-    screen.fill((0, 0, 0))
-    draw_text(screen, "Naciśnij dowolny klawisz, aby powrócić do menu", WIDTH // 2 - 265, HEIGHT // 2)
-    pygame.display.flip()
-    waiting = True
-    while waiting:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                waiting = False
+        if name:  # Only save if name was entered (not ESC)
+            from scoreboard import add_score
+            add_score(name, player_score, difficulty)
