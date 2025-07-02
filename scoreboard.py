@@ -45,7 +45,7 @@ def add_score(name, score, difficulty):
     scores.sort(key=lambda x: x['score'], reverse=True)
     scores = scores[:100]  # Keep only top 100
     save_scores(scores, difficulty)
-    return scores
+    return new_entry
 
 def get_top_scores(difficulty):
     """Get top scores for display for specific difficulty"""
