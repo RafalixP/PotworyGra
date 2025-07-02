@@ -4,7 +4,7 @@ import gc
 from pygame.locals import *
 from settings import WIDTH, HEIGHT, FPS, DELAY_RESPAWN, DIFFICULTY_SETTINGS
 from objects import Player, Bullet, Enemy, FastShootingBonus, BoostBonus #Bonus deleted
-from ui import draw_text, show_menu, confirm_exit, game_over_screen
+from ui import draw_text, show_menu, confirm_exit, game_over_screen, countdown
 import random
 
 pygame.init()
@@ -25,6 +25,9 @@ def main():
     while True:
         difficulty_level = show_menu(screen)
         diff_settings = DIFFICULTY_SETTINGS.get(difficulty_level, DIFFICULTY_SETTINGS[2])  # Default to medium
+        
+        # Show countdown before game starts
+        countdown(screen)
 
         player = Player(diff_settings['life_threshold_multiplier'])
         player.lives = diff_settings['player_lives']  # Set lives based on difficulty

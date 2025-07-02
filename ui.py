@@ -146,6 +146,25 @@ def show_scoreboard(screen, difficulty, highlight_score=None):
                 if event.key == K_ESCAPE:
                     return
 
+def countdown(screen):
+    """Show 3-2-1 countdown before game starts"""
+    font = pygame.font.SysFont("arial", 120)
+    for count in [3, 2, 1]:
+        screen.fill((0, 0, 0))
+        text = font.render(str(count), True, WHITE)
+        text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        screen.blit(text, text_rect)
+        pygame.display.flip()
+        pygame.time.wait(1000)
+    
+    # Show "GO!" briefly
+    screen.fill((0, 0, 0))
+    go_text = font.render("GO!", True, (0, 255, 0))
+    go_rect = go_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    screen.blit(go_text, go_rect)
+    pygame.display.flip()
+    pygame.time.wait(500)
+
 def game_over_screen(screen, player_score=0, difficulty=2, game_time=0):
     """Game over screen with optional score saving"""
     # Format time display
