@@ -37,7 +37,8 @@ print("\n=== SCORES BY DIFFICULTY ===")
 print(df.groupby('difficulty')['score'].agg(['count', 'mean', 'max']))
 
 # Simple visualization
-ax = df.boxplot(column='score', by='difficulty', figsize=(10, 6))
+#plt.figure(figsize=(10, 6))
+df.boxplot(column='score', by='difficulty')
 plt.title('Your Game Scores by Difficulty')
 plt.ylabel('Score')
 plt.show()
