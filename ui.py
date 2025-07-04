@@ -111,7 +111,7 @@ def show_scoreboard_menu(screen):
                 elif event.key == K_ESCAPE:
                     return
 
-def show_scoreboard(screen, difficulty, highlight_score=None):
+def show_scoreboard(screen, difficulty, highlight_entry=None):
     """Display scoreboard for specific difficulty"""
     scores = get_top_scores(difficulty)
     difficulty_name = DIFFICULTY_NAMES[difficulty]
@@ -126,8 +126,11 @@ def show_scoreboard(screen, difficulty, highlight_score=None):
             y = 120
             for i, score in enumerate(scores[:20]):  # Show top 20
                 place_text = f"{i+1:2d}. {score['name'][:12]:<12} {score['score']:>6}    {score['date']}"
-                # Highlight if this is the recent game score
-                if highlight_score and score['score'] == highlight_score:
+                # Highlight if this is the recent game entry (exact match)
+                if (highlight_entry and 
+                    score['score'] == highlight_entry['score'] and 
+                    score['date'] == highlight_entry['date'] and 
+                    score['name'] == highlight_entry['name']):
                     # Draw background highlight
                     pygame.draw.rect(screen, (50, 50, 100), (45, y+6, WIDTH-90, 25))
                 draw_text(screen, place_text, 50, y)
@@ -197,5 +200,5 @@ def game_over_screen(screen, player_score=0, difficulty=2, game_time=0):
         name = get_player_name(screen)
         if name:  # Only save if name was entered (not ESC)
             from scoreboard import add_score
-            add_score(name, player_score, difficulty)
-            show_scoreboard(screen, difficulty, highlight_score=player_score)
+            new_entry = add_score(name, player_score, difficulty)
+            show_scoreboard(screen, difficulty, highlight_entry=new_entry)
