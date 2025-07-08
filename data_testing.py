@@ -4,10 +4,10 @@ import json
 def load_game_data():
     """Load game data for testing"""
     difficulties = {
-        #'Easy': 'scores_easy.json',
-        #'Medium': 'scores_medium.json', 
-        'Hard': 'scores_hard.json'#,
-        #'Expert': 'scores_expert.json'
+        'Easy': 'scores_easy.json',
+        'Medium': 'scores_medium.json', 
+        'Hard': 'scores_hard.json',
+        'Expert': 'scores_expert.json'
     }
     
     all_scores = []
