@@ -2,14 +2,16 @@
 
 A Python-based space invaders game with comprehensive data analysis and quality testing features.
 
+What started as a simple game development exercise during an "AI for Programmers" training has evolved into a comprehensive showcase of software engineering practices, combining game development, data analysis, and quality assurance methodologies.
+
 ## 🎮 Features
 
 ### Game Features
 - **4 Difficulty Levels**: Easy, Medium, Hard, Expert
 - **Progressive Difficulty**: Enemies get faster and more numerous over time
 - **Power-ups**: Speed boost and rapid fire bonuses
-- **Persistent Scoreboards**: JSON-based score tracking per difficulty
-- **Real-time Statistics**: Lives, score, boost gauge, timer
+- **Persistent Scoreboards**: score tracking per difficulty
+- **In-game Statistics**: Lives, score, boost gauge, timer
 
 ### Data Analysis Features
 - **Performance Analytics**: Score trends, time patterns, difficulty analysis
@@ -41,7 +43,8 @@ PotworyGra/
 │   ├── objects.py         # Game objects (Player, Enemy, Bullet)
 │   ├── ui.py              # User interface and menus
 │   ├── settings.py        # Game configuration
-│   └── assets.py          # Game assets and graphics
+│   ├── assets.py          # Game assets and graphics
+│   └── scoreboard.py      # Score management and persistence
 ├── data/                  # Data files
 │   ├── scores_easy.json   # Easy mode scores
 │   ├── scores_medium.json # Medium mode scores
@@ -52,8 +55,11 @@ PotworyGra/
 │   └── data_testing.py    # Data quality tests
 ├── tests/                 # Test suite
 │   ├── test_game.py       # Game logic tests
-│   ├── test_pytest_*.py   # Pytest examples
-│   └── conftest.py        # Test configuration
+│   ├── test_integration.py # Integration tests
+│   ├── test_pytest_*.py   # Pytest tests
+│   ├── conftest.py        # Test configuration
+│   ├── pytest.ini        # Pytest settings
+│   └── requirements-test.txt # Testing dependencies
 └── docs/                  # Documentation
     └── screenshots/       # Game screenshots
 ```
