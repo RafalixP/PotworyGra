@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 # Load your game scores
 def load_game_data():
     difficulties = {
-        'Easy': 'scores_easy.json',
-        'Medium': 'scores_medium.json', 
-        'Hard': 'scores_hard.json',
-        'Expert': 'scores_expert.json'
+        'Easy': 'data/scores_easy.json',
+        'Medium': 'data/scores_medium.json', 
+        'Hard': 'data/scores_hard.json',
+        'Expert': 'data/scores_expert.json'
     }
     
     all_scores = []
