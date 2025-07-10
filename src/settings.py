@@ -17,7 +17,7 @@ PLAYER_FRICTION = 0.7     # Jak szybko zwalnia (0.7 wydaje się działać dobrze
 BULLET_SPEED = -10
 ENEMY_SPEED = 2
 BONUS_SPEED = 4
-SPEED_DECAY = 0.0005  #     Speed decay for player boost
+SPEED_DECAY = 0.0005  #     Speed decay for player boost - jak szybko "znika" speed boost
 
 # Difficulty settings for each level
 DIFFICULTY_SETTINGS = {
