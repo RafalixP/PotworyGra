@@ -1,3 +1,6 @@
+# a teaching example showing fixture lifecycle
+# run: python -m pytest tests/test_fixture_demo.py -s -v 
+
 import pytest
 
 @pytest.fixture
