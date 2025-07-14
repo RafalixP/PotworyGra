@@ -1,8 +1,14 @@
+# Advanced pytest testing techniques applied to game functionality - demonstrates fixtures, mocking, and performance testing
 import pytest
 import pygame
 import tempfile
 import os
+import sys
 from unittest.mock import Mock, patch, MagicMock
+
+# Add src directory to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
 from objects import Player, Enemy, Bullet
 from scoreboard import add_score, load_scores, save_scores
 from main import spawn_bonus
