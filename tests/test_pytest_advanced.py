@@ -1,4 +1,4 @@
-# Advanced pytest testing techniques applied to game functionality - demonstrates fixtures, mocking, and performance testing
+# More advanced pytest testing techniques applied to game functionality - demonstrates fixtures, mocking, and performance testing
 import pytest
 import pygame
 import tempfile
