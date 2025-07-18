@@ -1,5 +1,12 @@
+# Basic pytest testing techniques applied to game functionality - demonstrates fixtures, assertions, and parametrization
 import pytest
 import pygame
+import sys
+import os
+
+# Add src directory to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
 from objects import Player, Enemy, Bullet, FastShootingBonus, BoostBonus
 from scoreboard import add_score, load_scores
 from settings import DIFFICULTY_SETTINGS

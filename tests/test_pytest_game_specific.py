@@ -1,6 +1,13 @@
+# Game-specific pytest tests - focuses on game mechanics, collision detection, progression, and scoring systems
 import pytest
 import pygame
+import sys
+import os
 from unittest.mock import Mock, patch
+
+# Add src directory to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
 from objects import Player, Enemy, Bullet, FastShootingBonus, BoostBonus
 from main import spawn_bonus
 
