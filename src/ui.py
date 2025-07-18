@@ -115,9 +115,14 @@ def show_scoreboard_menu(screen):
                     return
 
 def show_scoreboard(screen, difficulty, highlight_entry=None):
-    """Display scoreboard for specific difficulty"""
+    """Display scoreboard for specific difficulty with pagination"""
     scores = get_top_scores(difficulty)
     difficulty_name = DIFFICULTY_NAMES[difficulty]
+    
+    # Pagination variables
+    page = 0
+    scores_per_page = 20
+    max_pages = (len(scores) + scores_per_page - 1) // scores_per_page  # Ceiling division
     
     while True:
         screen.fill((0, 0, 0))
@@ -126,9 +131,17 @@ def show_scoreboard(screen, difficulty, highlight_entry=None):
         if not scores:
             draw_text(screen, "Brak wyników", WIDTH // 2 - 80, HEIGHT // 2)
         else:
+            # Calculate start and end indices for current page
+            start_idx = page * scores_per_page
+            end_idx = min(start_idx + scores_per_page, len(scores))
+            
+            # Show page info
+            if max_pages > 1:
+                draw_text(screen, f"Strona {page+1}/{max_pages}", WIDTH // 2 - 80, 90)
+            
             y = 120
-            for i, score in enumerate(scores[:20]):  # Show top 20
-                place_text = f"{i+1:2d}. {score['name'][:12]:<12} {score['score']:>6}    {score['date']}"
+            for i, score in enumerate(scores[start_idx:end_idx]):
+                place_text = f"{start_idx+i+1:2d}. {score['name'][:12]:<12} {score['score']:>6}    {score['date']}"
                 # Highlight if this is the recent game entry (exact match)
                 if (highlight_entry and 
                     score['score'] == highlight_entry['score'] and 
@@ -138,10 +151,11 @@ def show_scoreboard(screen, difficulty, highlight_entry=None):
                     pygame.draw.rect(screen, (50, 50, 100), (45, y+6, WIDTH-90, 25))
                 draw_text(screen, place_text, 50, y)
                 y += 30
-                if y > HEIGHT - 100:
-                    break
         
-        draw_text(screen, "Naciśnij ESC aby wrócić", WIDTH // 2 - 150, HEIGHT - 50)
+        # Navigation instructions
+        if max_pages > 1:
+            draw_text(screen, "← → Zmień stronę", WIDTH // 2 - 150, HEIGHT - 80)
+        draw_text(screen, "ESC - Powrót", WIDTH // 2 - 150, HEIGHT - 50)
         pygame.display.flip()
         
         for event in pygame.event.get():
@@ -151,6 +165,10 @@ def show_scoreboard(screen, difficulty, highlight_entry=None):
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     return
+                elif event.key == K_LEFT and page > 0:  # Previous page
+                    page -= 1
+                elif event.key == K_RIGHT and page < max_pages - 1:  # Next page
+                    page += 1
 
 def countdown(screen):
     """Show 3-2-1 countdown before game starts"""
