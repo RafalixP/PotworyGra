@@ -2,11 +2,15 @@ import json
 import os
 from datetime import datetime
 
+# Get absolute paths to data files
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+
 SCOREBOARD_FILES = {
-    1: "../data/scores_easy.json",
-    2: "../data/scores_medium.json", 
-    3: "../data/scores_hard.json",
-    4: "../data/scores_expert.json"
+    1: os.path.join(DATA_DIR, "scores_easy.json"),
+    2: os.path.join(DATA_DIR, "scores_medium.json"), 
+    3: os.path.join(DATA_DIR, "scores_hard.json"),
+    4: os.path.join(DATA_DIR, "scores_expert.json")
 }
 
 DIFFICULTY_NAMES = {
